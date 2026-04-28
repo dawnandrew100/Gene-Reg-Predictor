@@ -5,9 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "biobase>=0.9.0",
+    "biobase>=0.9.1",
+    "biopython>=1.87",
     "numpy>=2.4.3",
     "pandas>=3.0.1",
+    "tqdm>=4.67.3",
 ]
 
 [dependency-groups]
