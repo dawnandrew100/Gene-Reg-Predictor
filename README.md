@@ -17,6 +17,15 @@ The following scripts are in the `data_processing` folder.
 and filters the columns to only keep Regulator Symbol, Target Symbol,
 and Regulator Type.
 The file also filters the rows to only keep regulators that are miRNA and lncRNA.
+Results are saved to `mouse_Regulator_Gene.csv`.
+
+2. `get_sequence.py` extracts sequences from a local download of mouse genes from
+NCBI `rna.fna` and a local download of mouse proteins from [STRING](https://string-db.org/cgi/organisms)
+`10090.protein.sequences.v12.0.fa`. To ensure the accession number matches the
+symbols in the regulator gene csv, `10090.protein.aliases.v12.0.txt` is used.
+These sequences are matched with the symbols from `mouse_Regulator_Gene.csv` and
+saved to `seq_info.json`. An updated CSV file containing only symbols with
+accompanying sequences is created called `sequence_mouse_Regulator_Gene.csv`.
 
 ## Data Disclosure
 
