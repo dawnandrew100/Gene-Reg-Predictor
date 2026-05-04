@@ -7,9 +7,15 @@ requires-python = ">=3.14"
 dependencies = [
     "biobase>=0.9.1",
     "biopython>=1.87",
+    "enformer-pytorch>=0.8.11",
+    "fair-esm>=2.0.0",
+    "matplotlib>=3.10.9",
     "numpy>=2.4.3",
     "pandas>=3.0.1",
+    "scikit-learn>=1.8.0",
+    "torch>=2.11.0",
     "tqdm>=4.67.3",
+    "transformers[torch]>=5.7.0",
 ]
 
 [dependency-groups]
