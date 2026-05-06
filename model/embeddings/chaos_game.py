@@ -6,6 +6,7 @@ https://www.sciencedirect.com/science/article/pii/S2001037021004736
 import math
 import numpy as np
 import numpy.typing as npt
+import torch
 
 
 def generate_square_points(
@@ -47,8 +48,8 @@ def label_chaos_points(
 
 def create_chaos(
     sequence: str,
-    center: tuple[float, float],
     chaos_dict: dict[str, tuple[float, float]],
+    center: tuple[float, float] = (0.0, 0.0),
 ) -> list[tuple[float, float]] | None:
     num_vertices = len(chaos_dict)
     m = num_vertices // 4
@@ -65,7 +66,7 @@ def create_chaos(
     cgr = []
     cgr_marker = center[:]
     for letter in sequence:
-        step_direction = chaos_dict[letter]
+        step_direction = chaos_dict.get(letter)
         if step_direction:
             cgr_marker = (
                 (
@@ -102,3 +103,11 @@ def cgr_to_fcgr(
         row = max(0, min(resolution - 1, row))
         grid[row, col] += 1
     return grid
+
+
+def fcgr_to_tensor(fcgr_list: list[npt.NDArray[np.intc]]) -> torch.Tensor:
+    batch_list = []
+    for grid in fcgr_list:
+        grid_tensor = torch.from_numpy(grid).unsqueeze(0)
+        batch_list.append(grid_tensor)
+    return torch.stack(batch_list)

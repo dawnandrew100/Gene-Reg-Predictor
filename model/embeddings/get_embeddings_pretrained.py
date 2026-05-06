@@ -143,8 +143,8 @@ def main():
     print(f"Final DNA Tensor Shape: {last_hidden.shape}")
 
     # Save results
-    torch.save(protein_final_label_vectors, "./embeddings/protein_embeddings.pt")
-    torch.save(dna_final_label_vectors, "./embeddings/dna_embeddings.pt")
+    torch.save(protein_final_label_vectors, "pretrained_protein_embeddings.pt")
+    torch.save(dna_final_label_vectors, "pretrained_dna_embeddings.pt")
 
     print("Processing complete. Files saved in ./embeddings/")
 
