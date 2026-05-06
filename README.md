@@ -32,6 +32,13 @@ The followings scripts are in the `model/` folder
 
 3. `get_embeddings.py` opens the previously generated JSON files
 and converts the sequences into their respective embeddings.
+The sequences are converted to a [Chaos Game](https://en.wikipedia.org/wiki/Chaos_game)
+Representation (CGR) and this CGR is converted to a Frequency CGR (FCGR) by
+counting the number of dots in each grid section. This FCGR represents a k-mer
+size of 3.32 k-mers given by the equation $k = \frac{\log_{2} (q)}{2}$ where
+k is the k-mer size and q is the number of quadrants.
+The benefit of the FGCR is that sequences of all sizes are represented by a fixed
+size numpy 2D array. This eliminated the need for padding.
 
 ## Data Disclosure
 

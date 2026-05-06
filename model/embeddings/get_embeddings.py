@@ -7,11 +7,12 @@ from tqdm import tqdm, trange
 from collections import defaultdict
 import json
 
-# Local import
+# Local imports
 import chaos_game as cg
 from embedding_nn import NeuralBedsCNN
 
 
+# This script takes about 8 - 9 minutes to run
 def main():
     # cDNA Chaos Game Representation
     radius = 10.0
