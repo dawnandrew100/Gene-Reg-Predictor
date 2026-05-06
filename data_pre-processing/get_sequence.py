@@ -126,9 +126,7 @@ def fetch_sequences_from_local_strings(
     symbols: set[str],
 ) -> dict[str, list[str]]:
 
-    filtered_df = df[
-        df["alias"].isin(symbols)
-    ]
+    filtered_df = df[df["alias"].isin(symbols)]
     unique_df = filtered_df.drop_duplicates(subset="#string_protein_id", keep="first")
     print(df)
     print(filtered_df)
