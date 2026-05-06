@@ -16,10 +16,10 @@ class NeuralBedsCNN(nn.Module):
         self.relu1 = nn.ReLU()
 
         # Pooling layer with stride 1, padding 0
-        self.pool = nn.AdaptiveAvgPool2d((8, 8))  # Adaptive pooling
+        self.pool = nn.AdaptiveAvgPool2d((1, 1))  # Adaptive pooling
 
         # Fully connected layer: 512 neurons, ReLU, dropout 0.2
-        self.fc1 = nn.Linear(1024 * 8 * 8, 512)
+        self.fc1 = nn.Linear(1024, 512)
         self.relu2 = nn.ReLU()
         self.dropout = nn.Dropout(0.2)
 
@@ -27,9 +27,14 @@ class NeuralBedsCNN(nn.Module):
         self.fc_out = nn.Linear(512, embedding_dim)
         self.tanh = nn.Tanh()
 
-    def forward(self, x):
+        self.classifier = nn.Linear(embedding_dim, 1)
+
+    def forward(self, x, return_embedding=False):
         x = self.relu1(self.conv1(x))
         x = self.pool(x)
+        x = x.squeeze(-1).squeeze(-1)
         x = self.dropout(self.relu2(self.fc1(x)))
-        x = self.tanh(self.fc_out(x))
-        return x
+        embedding = self.tanh(self.fc_out(x))
+        if return_embedding:
+            return embedding
+        return self.classifier(embedding)
