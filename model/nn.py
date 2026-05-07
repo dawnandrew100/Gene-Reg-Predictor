@@ -19,7 +19,7 @@ from tqdm import trange
 import random
 
 # Local imports
-from nn_model import GeneRegModel
+from nn_model import GeneRegRNNModel, GeneRegTransformerModel
 
 
 def main():
@@ -29,6 +29,7 @@ def main():
     dna_embeddings = torch.load("./embeddings/dna_embeddings.pt")
 
     # Pair positive embeddings and generate negative samples
+    # Takes 5-7 minutes to generate datasets
     print("Generating dataset")
     x_data, y_data = get_dataset(df, dna_embeddings)
 
@@ -49,7 +50,8 @@ def main():
 
     # Invoke the model
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = GeneRegModel(n_embeddings=512).to(device)
+    # model = GeneRegRNNModel(embed_dim=512).to(device)
+    model = GeneRegTransformerModel(embed_dim=512, n_heads=8).to(device)
 
     # Train the model
     pos_weight = (1 - y_train.mean()) / y_train.mean()
@@ -58,7 +60,8 @@ def main():
 
     train_losses = []
     test_losses = []
-    # This took 1 hours 20 minutes to run
+    # Training starts slowing (taking several minutes), but speeds up over time
+    # Can take up to 8 minutes to finish first Epoch
     for epoch in trange(100, desc="Training Epochs"):
         model.train()
         train_loss = 0
