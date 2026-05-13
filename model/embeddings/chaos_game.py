@@ -85,22 +85,22 @@ def create_chaos(
 
 
 def cgr_to_fcgr(
-    cgr: list[tuple[float, float]], resolution: int, radius: float
+    cgr: list[tuple[float, float]], kernel_size: int, radius: float
 ) -> npt.NDArray[np.intc]:
     """
     Converts coordinates of Chaos Game Representation to numpy grid as
     Frequency Chaos Game Representation. Allows for fixed size for NN input.
     """
-    grid = np.zeros((resolution, resolution))
+    grid = np.zeros((kernel_size, kernel_size))
     coords = np.array(cgr)
     x_min, x_max = -radius, radius
     y_min, y_max = -radius, radius
 
     for x, y in coords:
-        col = int((x - x_min) / (x_max - x_min) * (resolution - 1))
-        row = int((y - y_min) / (y_max - y_min) * (resolution - 1))
-        col = max(0, min(resolution - 1, col))
-        row = max(0, min(resolution - 1, row))
+        col = round((x - x_min) / (x_max - x_min) * (kernel_size - 1))
+        row = round((y - y_min) / (y_max - y_min) * (kernel_size - 1))
+        col = max(0, min(kernel_size - 1, col))
+        row = max(0, min(kernel_size - 1, row))
         grid[row, col] += 1
     return grid
 

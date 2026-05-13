@@ -20,6 +20,8 @@ def main():
     dna_points = cg.generate_square_points(4, radius=radius, rotation_deg=45)
     dna_labels = "TGCA"
     dna_labelled = cg.label_chaos_points(dna_labels, dna_points)
+    # N has coordinates 0, 0 since all nucleotides could be N
+    # So N is in the centre of the square
     dna_labelled.update({"N": (0.0, 0.0), "n": (0.0, 0.0)})
     print(dna_labelled)
 
