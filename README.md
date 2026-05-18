@@ -24,7 +24,7 @@ The file also filters the rows to only keep regulators that are miRNA and lncRNA
   - `mouse_Regulator_Gene.csv`
 
 2. `get_sequence.py` extracts sequences from a local download of mouse genes from
-NCBI `rna.fna` and a local download of mouse proteins from [STRING](https://string-db.org/cgi/organisms)
+NCBI `rna.fna` and a local download of mouse proteins from [STRING](https://string-db.org/cgi/download?species=Mus+musculus)
 `10090.protein.sequences.v12.0.fa`. To ensure the accession number matches the
 symbols in the regulator gene csv, `10090.protein.aliases.v12.0.txt` is used.
 These sequences are matched with the symbols from `mouse_Regulator_Gene.csv` and
@@ -41,6 +41,12 @@ containing only symbols with accompanying sequences is created called
   - `dna_seq_info.json`
   - `protein_seq_info.json`
   - `sequence_mouse_Regulator_Gene.csv`
+- Model
+  - [Convolutional NN embedding model](https://github.com/dawnandrew100/Gene-Reg-Predictor/blob/main/model/embeddings/embedding_nn.py)
+    - Generates higher dimensional embeddings of input sequences based on frequency chaos game representation (FCGR)
+    - ```py
+      class NeuralBedsCNN(nn.Module)
+      ```
 
 The following script is in the `model/embeddings/` folder
 
@@ -67,7 +73,22 @@ located in `chaos_game.py`. The model used to produce the embeddings is is `embe
 
 The following script is in the `model/` folder
 
-4. `nn.py`
+4. `nn.py` opens sequence information from `sequence_mouse_Regulator_Gene.csv` and loads embeddings from
+`dna_embeddings.pt` then converts embeddings into an appropriately shaped dataset using the `get_dataset` function.
+This function combines regulators and targets based on the `.csv` to create positive samples then generates negative
+samples on the fly by combing targets with regulators not explicitly paired in the `.csv`. The data is then split into
+training and testing data and the relevant model is trained to 100 epochs.
+- Model
+  - [Recurrent NN predictor model](https://github.com/dawnandrew100/Gene-Reg-Predictor/blob/main/model/nn_model.py)
+    - Predicts whether RNA `x` regulates gene `Y` and generates a probability of this regulatory pair
+    - ```py
+      class GeneRegRNNModel(nn.Module)
+      ``` 
+  - [Transformer predictor model](https://github.com/dawnandrew100/Gene-Reg-Predictor/blob/main/model/nn_model.py)
+    - Predicts whether RNA `x` regulates gene `Y` and generates a probability of this regulatory pair
+    - ```py
+      class GeneRegTransformerModel(nn.Module)
+      ```
 
 ## Data Disclosure
 
@@ -76,19 +97,24 @@ The Gene Regulation data used in this pipeline was acquired from
 the `Regulator-Gene` data for the `Complete data in mouse` dataset.
 
 The sequence data was taken from
-[NCBI](https://www.ncbi.nlm.nih.gov/datasets/gene/GCF_000001635.27/).
+[NCBI](https://www.ncbi.nlm.nih.gov/datasets/gene/GCF_000001635.27/) for RNA/DNA sequences and
+[STRING](https://string-db.org/cgi/download?species=Mus+musculus) for protein sequences.
 
 ## Sequence Embeddings
 
 - Pre-trained models
-- Protein sequence embedding
-  - [Meta's Evolutionary Scale Modeling](https://github.com/facebookresearch/esm)
-  (esm) model
-  - [Model article](https://www.biorxiv.org/content/10.1101/2022.12.21.521521v1)
+  - Protein sequence embedding
+    - [Meta's Evolutionary Scale Modeling](https://github.com/facebookresearch/esm)
+    (esm) model
+    - [Model article](https://www.biorxiv.org/content/10.1101/2022.12.21.521521v1)
+  
+  - DNA sequence embedding
+    - [GROVER](https://huggingface.co/PoetschLab/GROVER)
+    - [Model article](https://www.nature.com/articles/s42256-024-00872-0)
+    model
 
-- DNA sequence embedding
-  - [GROVER](https://huggingface.co/PoetschLab/GROVER)
-  - [Model article](https://www.nature.com/articles/s42256-024-00872-0)
-  model
+- Manually trained model
+  - Chaos Game Representation (CGR) and Frequency CGR (FCGR)
+  - [Article](https://www.sciencedirect.com/science/article/pii/S2001037021004736)
 
 
