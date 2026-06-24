@@ -90,6 +90,34 @@ training and testing data and the relevant model is trained to 100 epochs.
       class GeneRegTransformerModel(nn.Module)
       ```
 
+## Results
+
+The performance of the Gated Recurrent Unit (GRU) RNN and Transformer models was evaluated on gene regulation
+prediction capability across four metrics; accuracy, precision, recall, and AUC-ROC.
+The Transformer architecture consistently outperformed the GRU RNN across all metrics.
+
+![RNN Loss Curve](https://github.com/dawnandrew100/Gene-Reg-Predictor/blob/main/figures/RNN_Loss_Curve.png)
+
+![Transformer Loss Curve](https://github.com/dawnandrew100/Gene-Reg-Predictor/blob/main/figures/Transformer_Loss_Curve.png)
+
+| Model            | Dataset  | Accuracy | Precision | Recall | AUC-ROC |
+| ---------------- | -------- | -------- | --------- | ------ | ------- |
+| **GRU RNN**      | Training | 0.7007   | 0.7212    | 0.7361 | 0.7658  |
+|                  | Testing  | 0.6993   | 0.7198    | 0.7351 | 0.7645  |
+| **Transformers** | Training | 0.7236   | 0.7357    | 0.7705 | 0.7990  |
+|                  | Testing  | 0.7242   | 0.7361    | 0.7713 | 0.7995  |
+
+* **GRU RNN Model Analysis:** The loss curve leveled off early (starting at epoch 40 and plateauing completely by epoch 60),
+indicating early convergence but ultimately somewhat underfitting the data as indicated by the better than random yet still
+low scores of around 70%. Even though this was the case, the model still generalised well as there were no gaps between
+training and testing metrics. This suggests that while the GRU captured broad regulator-target interactions, the recurrent
+architectures may have struggled with the long-distance sequence matches necessary to capture relevant motifs.
+  
+* **Transformer Model Analysis:** The Transformer's loss curve did not plateau within 100 epochs, indicating further room
+for optimisation (e.g., via a higher learning rate). Although the metrics were overall better with the transformer model,
+they could still be improved to all be >85% through hyperparameter tuning. Despite this, it achieved a substantial jump
+in recall and AUC-ROC.
+
 ## Data Disclosure
 
 The Gene Regulation data used in this pipeline was acquired from
